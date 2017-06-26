@@ -4,14 +4,8 @@
   </div>
   <div *ngIf="products?.length > 0" class="small-up-2 medium-up-4 large-up-6">
 
-    <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|
-    | Green Path                                                       |
-    |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|
-    | Suscribe el componente ProductComponent al evento que hayas      |
-    | definido en él para notificar los clics sobre los productos.     |
-    |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
-
-    <app-product
+   <!-- En la 1ª línea suscribimos a este componente, al eventEmitter del componente hijo para estar al tanto de los clicks que le hagan -->
+    <app-product (notificarClickParaDetalle)="notificarClickDetalle($event)"
       *ngFor="let product of products"
       [data]="product"
       class="column">
