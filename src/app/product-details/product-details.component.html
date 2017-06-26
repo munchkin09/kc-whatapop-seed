@@ -11,16 +11,8 @@
         'warning': product.category.id === 3 }">
         {{ product.category.name }}
       </span>
-
-      <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|
-      | Blue Path                                                        |
-      |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|
-      | Una vez tengas creado el Pipe PublicationDatePipe, úsalo con la  |
-      | fecha de publicación.                                            |
-      |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
-
       <span>
-        {{ product.publishedDate }}
+        {{ (product.publishedDate | PublicationDate) }} 
       </span>
     </p>
     <p [innerHtml]="product.description"></p>
