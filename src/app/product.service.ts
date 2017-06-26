@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { Http, Response, RequestOptions, URLSearchParams } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 
@@ -16,34 +16,15 @@ export class ProductService {
 
   getProducts(filter: ProductFilter = undefined): Observable<Product[]> {
 
-    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|
-    | Pink Path                                                        |
-    |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|
-    | Pide al servidor que te retorne los productos ordenados de más   |
-    | reciente a menos, teniendo en cuenta su fecha de publicación.    |
-    |                                                                  |
-    | En la documentación de 'JSON Server' tienes detallado cómo hacer |
-    | la ordenación de los datos en tus peticiones, pero te ayudo      |
-    | igualmente. La querystring debe tener estos parámetros:          |
-    |                                                                  |
-    |   _sort=publishedDate&_order=DESC                                |
-    |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
-    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|
-    | Red Path                                                         |
-    |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|
-    | Pide al servidor que te retorne los productos filtrados por      |
-    | texto y/ por categoría.                                          |
-    |                                                                  |
-    | En la documentación de 'JSON Server' tienes detallado cómo       |
-    | filtrar datos en tus peticiones, pero te ayudo igualmente. La    |
-    | querystring debe tener estos parámetros:                         |
-    |                                                                  |
-    |   - Búsqueda por texto:                                          |
-    |       q=x (siendo x el texto)                                    |
-    |   - Búsqueda por categoría:                                      |
-    |       category.id=x (siendo x el identificador de la categoría)  |
-    |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+    //console.log(filter);
+    let sort = new URLSearchParams();
+    sort.set('_sort','publishedDate');
+    sort.set('_order','DESC');
+    
+   if(filter){
+      sort.set('q',filter.text);
+      sort.set('category.id', filter.category);
+    }
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|
     | Yellow Path                                                      |
@@ -59,8 +40,10 @@ export class ProductService {
     |       state=x (siendo x el estado)                               |
     |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
+    let options = new RequestOptions();
+    options.search = sort;
     return this._http
-      .get(`${this._backendUri}/products`)
+      .get(`${this._backendUri}/products`,options)
       .map((data: Response): Product[] => Product.fromJsonToList(data.json()));
   }
 
