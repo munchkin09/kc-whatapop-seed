@@ -37,18 +37,7 @@ export class ProductsCollectionComponent implements OnDestroy, OnInit {
     this._filterStream$.next(filter);
   }
 
-  /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|
-  | Green Path                                                       |
-  |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|
-  | Maneja el evento del componente ProductComponent que indica la   |
-  | selección de un producto y navega a la dirección correspondiente.|
-  | Recuerda que para hacer esto necesitas inyectar como dependencia |
-  | el Router de la app. La ruta a navegar es '/products', pasando   |
-  | como parámetro el identificador del producto.                    |
-  |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
   notificarClickDetalle(dato: Product): void {
-    console.log("paso");
     this._router.navigate(['/products',dato.id]);
     
   }

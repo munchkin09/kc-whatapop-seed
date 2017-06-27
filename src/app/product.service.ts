@@ -16,32 +16,22 @@ export class ProductService {
 
   getProducts(filter: ProductFilter = undefined): Observable<Product[]> {
 
-    //console.log(filter);
-    let sort = new URLSearchParams();
-    sort.set('_sort','publishedDate');
-    sort.set('_order','DESC');
+    let URLParams = new URLSearchParams();
+    URLParams.set('_sort','publishedDate');
+    URLParams.set('_order','DESC');
     
    if(filter){
-      sort.set('q',filter.text);
-      sort.set('category.id', filter.category);
+     if(filter.text) URLParams.set('q',filter.text);
+
+     if(filter.category && filter.category !== '0') URLParams.set('category.id', filter.category);
+
+     if(filter.state) URLParams.set('state',filter.state);
     }
-
-    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|
-    | Yellow Path                                                      |
-    |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|
-    | Pide al servidor que te retorne los productos filtrados por      |
-    | estado.                                                          |
-    |                                                                  |
-    | En la documentación de 'JSON Server' tienes detallado cómo       |
-    | filtrar datos en tus peticiones, pero te ayudo igualmente. La    |
-    | querystring debe tener estos parámetros:                         |
-    |                                                                  |
-    |   - Búsqueda por estado:                                         |
-    |       state=x (siendo x el estado)                               |
-    |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
+ 
     let options = new RequestOptions();
-    options.search = sort;
+    options.search = URLParams;
+ 
+    
     return this._http
       .get(`${this._backendUri}/products`,options)
       .map((data: Response): Product[] => Product.fromJsonToList(data.json()));
